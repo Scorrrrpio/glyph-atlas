@@ -1,0 +1,4 @@
+# Compiled object files
+*.o
+# Executables
+exec
