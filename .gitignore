@@ -2,3 +2,5 @@
 *.o
 # Executables
 exec
+# PNG outputs
+*.png

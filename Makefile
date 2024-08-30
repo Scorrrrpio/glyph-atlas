@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -I/usr/include/freetype2
+CXXFLAGS = -I/usr/include/freetype2 -Iinclude
 LDFLAGS = -lfreetype
 
 exec: main.o
