@@ -83,7 +83,7 @@ void generateAtlas(FT_Face face, const std::string& jsonPath) {
 	}
 
 	// write atlas to PNG
-	stbi_write_png("glyph-atlas.png", WIDTH, HEIGHT, 1, atlas.data(), WIDTH);
+	stbi_write_png("glyphAtlas.png", WIDTH, HEIGHT, 1, atlas.data(), WIDTH);
 
 	// write metadata to JSON
 	nlohmann::json jsonOutput;
@@ -107,7 +107,12 @@ void generateAtlas(FT_Face face, const std::string& jsonPath) {
 	outFile << jsonOutput.dump(4);
 }
 
-int main() {
+int main(int argc, char** argv) {
+	if (argc != 3) {
+		std::cerr << "Required arguments: font, size" <<std::endl;
+		return 1;
+	}
+
 	FT_Library ft;
 	if (FT_Init_FreeType(&ft)) {
 		std::cerr << "Failed to initialize FreeType library" << std::endl;
@@ -115,12 +120,14 @@ int main() {
 	}
 
 	FT_Face face;
-	if (FT_New_Face(ft, "/usr/share/fonts/TTF/Hack-Regular.ttf", 0, &face)) {
+	if (FT_New_Face(ft, argv[1], 0, &face)) {
 		std::cerr << "Failed to load font" << std::endl;
 		return 1;
 	}
 
-	FT_Set_Pixel_Sizes(face, 0, 64);  // font size (64px)
+	int pixelSize = std::stoi(argv[2]);
+
+	FT_Set_Pixel_Sizes(face, 0, pixelSize);
 
 	generateAtlas(face, "metadata.json");
 
