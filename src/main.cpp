@@ -54,6 +54,7 @@ void generateAtlas(FT_Face face, const std::string& jsonPath) {
 		if (xOffset + g->bitmap.width >= WIDTH) {
 			xOffset = 0;
 			yOffset += maxRowHeight;
+			yOffset += 4;
 			maxRowHeight = 0;
 		}
 
@@ -77,6 +78,7 @@ void generateAtlas(FT_Face face, const std::string& jsonPath) {
 		}
 
 		xOffset += g->bitmap.width;
+		xOffset += 4;
 		maxRowHeight = std::max(maxRowHeight, static_cast<int>(g->bitmap.rows));
 	}
 
@@ -88,7 +90,7 @@ void generateAtlas(FT_Face face, const std::string& jsonPath) {
 	for (const auto& glyph : allMetadata) {
 		std::string letter;
 		letter.push_back(glyph.codepoint);
-		jsonOutput[letter].push_back({
+		jsonOutput[letter] = {
 			{"width", glyph.width},
 			{"height", glyph.height},
 			{"x", glyph.x},
@@ -98,7 +100,7 @@ void generateAtlas(FT_Face face, const std::string& jsonPath) {
 			{"u1", glyph.u1},
 			{"v0", glyph.v0},
 			{"v1", glyph.v1}
-		});
+		};
 	}
 
 	std::ofstream outFile(jsonPath);
@@ -118,7 +120,7 @@ int main() {
 		return 1;
 	}
 
-	FT_Set_Pixel_Sizes(face, 0, 48);  // font size (48px)
+	FT_Set_Pixel_Sizes(face, 0, 64);  // font size (64px)
 
 	generateAtlas(face, "metadata.json");
 
