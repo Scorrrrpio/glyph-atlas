@@ -9,4 +9,4 @@ main.o: src/main.cpp
 	$(CXX) $(CXXFLAGS) -c src/main.cpp
 
 clean:
-	rm -f *.o exec
+	rm -f *.o *.png *.json exec

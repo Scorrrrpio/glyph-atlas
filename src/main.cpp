@@ -20,7 +20,7 @@ struct Metadata {
 	float u1, v1;
 };
 
-void generateAtlas(FT_Face face, const std::string& jsonPath) {
+void generateAtlas(FT_Face face, int pixelSize, const std::string& jsonPath) {
 	// metadata vector
 	std::vector<Metadata> allMetadata;
 
@@ -87,6 +87,9 @@ void generateAtlas(FT_Face face, const std::string& jsonPath) {
 
 	// write metadata to JSON
 	nlohmann::json jsonOutput;
+	jsonOutput["metadata"] = {
+		{"pixelSize", pixelSize}
+	};
 	for (const auto& glyph : allMetadata) {
 		std::string letter;
 		letter.push_back(glyph.codepoint);
@@ -129,7 +132,7 @@ int main(int argc, char** argv) {
 
 	FT_Set_Pixel_Sizes(face, 0, pixelSize);
 
-	generateAtlas(face, "metadata.json");
+	generateAtlas(face, pixelSize, "metadata.json");
 
 	// CLEANUP
 	FT_Done_Face(face);
